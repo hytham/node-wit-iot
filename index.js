@@ -1,4 +1,5 @@
 // Declerations
+const config=require('fs');
 const record=require('node-record-lpcm16');
 const request=require('request');
 const snowboy_det=require('snowboy').Detector;
@@ -6,7 +7,11 @@ const snowboy_mod=require('snowboy').Models;
 //const witai=require('node-wit');
 const mqtt=require('mqtt');
 
-var witToken=""; // Add wit token
+// Read the configuration file from /etc/witiot.json
+var config_cont=fs.readFile('/etc/witiot.json').toString();
+var config_json=JSON.parse(config_cont);
+
+var witToken=""; // Add wit tokentoS
 
 
 exports.parseResult =function (err,resp,body){

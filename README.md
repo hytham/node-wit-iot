@@ -25,7 +25,8 @@ TBD
 
 
 # Config
-This tool will handle the folloing configuration values it (it must be placed on /etc/witiot.conf file)
+This tool will handle the followng configuration values it (it must be placed on /etc/witiot.conf file)
++   
 
 # Referance
 TBD
