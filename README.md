@@ -8,6 +8,7 @@ This tool depends on the follow libraries to be installed in your project
     3. node-wit (Wit.ai library to send communicate to the wit.ai servers)
     4. mqtt (is library that will send and recive mqtt message to any broker)
     5. request (to send http post request to the speech endpoint of wit.ai)
+    6. beeper (to play a beep sound when the hotkey is detected or when the speech is detected and being processed)
 
 # what is WIT-IOT
 wit-iot is a full tool that will run in the background to listn for a hotword, when the hot word occur it will start recording using sox command line and stop when sclelance is detected. 
