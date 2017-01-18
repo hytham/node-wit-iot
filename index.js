@@ -3,7 +3,7 @@ const record=require('node-record-lpcm16');
 const request=require('request');
 const snowboy_det=require('snowboy').Detector;
 const snowboy_mod=require('snowboy').Models;
-const witai=require('node-wit');
+//const witai=require('node-wit');
 const mqtt=require('mqtt');
 
 var witToken=process.env.WIT_TOKEN;
