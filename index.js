@@ -6,8 +6,12 @@ const snowboy_mod=require('snowboy').Models;
 //const witai=require('node-wit');
 const mqtt=require('mqtt');
 
-var witToken=process.env.WIT_TOKEN;
+var witToken=""; // Add wit token
 
+
+exports.parseResult =function (err,resp,body){
+    // Exposing the result of the respons to the outside
+}
 
 // Setting up snowboy
 const models=new snowboy_mod();
@@ -34,14 +38,16 @@ det.on('sound',function(){
 
 det.on('hotwords',function(){
     // On Hotword Detected
+    // play a beep
+
+   
 })
 
 
-const mic =record.start({
-
-});
-
-mic.pipe(det);
+record.start({
+    verbos:true,
+    recordProgram:'arecord'
+}).pipe(det);
 
 
 
