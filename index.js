@@ -11,7 +11,7 @@ const mqtt=require('mqtt');
 var config_cont=fs.readFile('/etc/witiot.json').toString();
 var config_json=JSON.parse(config_cont);
 
-var witToken=""; // Add wit tokentoS
+var witToken=wit.Token; // Add wit tokentoS
 
 
 exports.parseResult =function (err,resp,body){

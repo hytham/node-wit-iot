@@ -1,0 +1,25 @@
+{
+    "device":{
+
+    },
+    "account":{
+
+    },
+    "wit":{
+        "token":""
+    },
+    "snowboy":{
+
+    },
+    "sound":{
+
+    },
+    "iot":{
+        "enable":false,
+        "mqtt":{
+            "broker_address":"",
+            "broker_port":"",
+            "topic":""
+        }
+    }
+}
