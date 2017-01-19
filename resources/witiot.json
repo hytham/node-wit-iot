@@ -6,12 +6,13 @@
 
     },
     "wit":{
-        "token":""
+        "token":"6MDD6GPYT457K4T4XUU6REVJQMUYS3QP"
     },
     "snowboy":{
         "hotword":"snowboy",
         "sensativity":"0.5",
-        "file":"resources/snowboy.pmdl"
+        "file":"resources/snowboy.pmdl",
+        "audiogain":"2.0"
 
     },
     "sound":{
@@ -24,5 +25,10 @@
             "broker_port":"",
             "topic":""
         }
+    },
+    "aws":{
+        "aws_access_key_id":"",
+        "aws_secret_access_key":""
+
     }
 }

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/hytham/node-wit-iot#readme",
   "dependencies": {
+    "aws-sdk": "^2.7.25",
     "beeper": "^1.1.1",
     "mqtt": "^2.2.1",
     "node-record-lpcm16": "^0.2.0",
