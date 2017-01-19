@@ -9,6 +9,9 @@
         "token":""
     },
     "snowboy":{
+        "hotword":"snowboy",
+        "sensativity":"0.5",
+        "file":"resources/snowboy.pmdl"
 
     },
     "sound":{
