@@ -1,24 +1,25 @@
 // Declerations
-const fs=require('fs');
+var fs=require('fs');
+var Sound = require('node-aplay');
+var record=require('node-record-lpcm16');
+var Polly = require('aws-sdk').Polly;
+var request=require('request');
+var snowboy_det=require('snowboy').Detector;
+var snowboy_mod=require('snowboy').Models;
 
-const beep=require('beeper')
-const record=require('node-record-lpcm16');
-const Polly = require('aws-sdk').Polly;
-const request=require('request');
-const snowboy_det=require('snowboy').Detector;
-const snowboy_mod=require('snowboy').Models;
+var rec,det,nprresp,config_json;,isRecording=false,sclance_count=20; 
 
+global.current_state="start";
 
-var isRecording=false;
-var rec;
-var current_state;
-var sclance_count=20; // counter to see the sclience count befor the transition happen
-var config_json;
-
-exports.init=function(){
+/// Initalise the engine
+init=function(){
+    console.log("Loading configuration")
+    // Load the configuration file
  config_json
-    =JSON.parse(fs.readFileSync('resources/witiot.json', 'utf8'));/
+    =JSON.parse(fs.readFileSync('resources/witiot.json', 'utf8'));
+    console.log("Load snowboy resource ...... ");
 
+    console.log("Setup Snowboy")
     var models=new snowboy_mod();
     models.add({
         file:config_json.snowboy.file,
@@ -26,36 +27,41 @@ exports.init=function(){
         hotwords:config_json.snowboy.hotword
     });
 
-    var det=new snowboy_det({
+    det=new snowboy_det({
         resource:"resources/common.res",
         models:models,
         audioGain:parseFloat(config_json.snowboy.audiogain)
     });
 
-
+    
+    /// Setup event listner
+    console.log("Set listner ...... ");
     det.on('silence', function () {
         console.log('silence');
-        RunFSM();
+        //RunFSM();
     });
 
     det.on('sound', function () {
         console.log('sound');
-        RunFSM();
+        //RunFSM();
     });
 
     det.on('error', function () {
         console.log('error');
-        RunFSM();
+        //RunFSM();
     });
-
+    /// Set hotword
+    console.log("Set hotword ...... ");
     det.on('hotword', function (index, hotword) {
 
         console.log('hotword', index, hotword);
         isRecording=false;
         beep();
-        StartRecordingSpeech();
         RunFSM();
     });
+    console.log("Run state machine...... ");
+    global.current_state="hotword";
+
     RunFSM();
 }
 
@@ -67,24 +73,28 @@ exports.parseResult =function (err,resp,body){
 
 
 
-exports.StartListenForHW=function(){
+StartListenForHW=function(){
     record.start({
         verbos:true,
         threshold:0,
         recordProgram:'rec'
     }).pipe(det);
+   
 }
 
 exports.parseResult = function (err, resp, body) {
   
   if (err) 
     console.error(err)
-  console.log(body);
+   console.log(body);
 
+   nprresp=resp;
+   
+  current_state="npl";
   RunFSM();
 }
 
-exports.StartRecordingSpeech=function(){
+StartRecordingSpeech=function(){
     record.start({
         verbose: true,
         recordProgram: 'rec'
@@ -95,7 +105,9 @@ exports.StartRecordingSpeech=function(){
                 'Authorization': 'Bearer ' + config_json.wit.token,
                 'Content-Type': 'audio/wav'
             }
-        }, exports.parseResult))
+        }, exports.parseResult));
+
+        
 
    
 }
@@ -106,7 +118,31 @@ function RunFSM(){
     runStates(); // Run States 
 }
 function evalTrans(){
-    switch(current_state){
+    switch(global.current_state){
+
+        
+        case("hotword"):
+            // hotword state
+            StartListenForHW();
+            global.current_state="idle";
+        break;
+       
+        case("idle"):
+        // ideal state
+        break;
+        case("listne"):
+            console.log("listne for command");
+            StartRecordingSpeech();
+        // listne state
+        break;
+        case("npl"):
+        /// natural processing state
+        console.log("processing NPL commands")
+        ProcessNPL();
+        break;
+        case("speek"):
+        // speek state
+        break;
 
     }
 
@@ -117,6 +153,26 @@ function runStates(){
     }
 }
 
+function beep(){
+    // play beep sound
+    var music = new Sound('resources/ding.wav');
+    music.play();
+    music.on('complete',function () {
+        console.log('Done ding sound!');
+        current_state="listne";
+        RunFSM();
+    });
+}
+
+/// Pars the response from wit.ai and process the response
+function ProcessNPL(){
+
+}
+
+
+//// start the application
+
+this.init();
 
 
 
