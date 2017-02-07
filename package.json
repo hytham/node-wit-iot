@@ -24,6 +24,7 @@
     "node-record-lpcm16": "^0.2.0",
     "node-wit": "^4.2.0",
     "request": "^2.79.0",
+    "say": "^0.11.0",
     "snowboy": "^1.1.0",
     "sox": "^0.1.0"
   }

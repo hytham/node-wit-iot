@@ -2,12 +2,13 @@
 var fs=require('fs');
 var Sound = require('node-aplay');
 var record=require('node-record-lpcm16');
+var say = require('say');
 var Polly = require('aws-sdk').Polly;
 var request=require('request');
 var snowboy_det=require('snowboy').Detector;
 var snowboy_mod=require('snowboy').Models;
 
-var rec,det,nprresp,config_json;,isRecording=false,sclance_count=20; 
+var rec,det,nprresp,config_json,isRecording=false,sclance_count=20; 
 
 global.current_state="start";
 
@@ -62,7 +63,11 @@ init=function(){
     console.log("Run state machine...... ");
     global.current_state="hotword";
 
-    RunFSM();
+    Speak("This application will allow you to use snowboy and wit.ai to build an enhance natural",function(err){
+         RunFSM();
+    });
+
+   
 }
 
 
@@ -169,10 +174,13 @@ function ProcessNPL(){
 
 }
 
+// Speek the past text
+function Speak(txt,onComplete){
+    say.speak(txt,'',1.0,onComplete);
+}
+init();
 
-//// start the application
 
-this.init();
 
 
 
