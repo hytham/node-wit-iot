@@ -12,7 +12,8 @@
         "hotword":"snowboy",
         "sensativity":"0.5",
         "file":"resources/snowboy.pmdl",
-        "audiogain":"5.0"
+        "audiogain":"5.0",
+        "train":false
 
     },
     "sound":{
