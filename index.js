@@ -1,6 +1,6 @@
 // Declerations
 var fs=require('fs');
-var Sound = require('node-aplay');
+var Sound = require('play-sound')(opts = {})
 var record=require('node-record-lpcm16');
 var say = require('say');
 var Polly = require('aws-sdk').Polly;
@@ -62,10 +62,10 @@ init=function(){
     });
     console.log("Run state machine...... ");
     global.current_state="hotword";
-
-    Speak("This application will allow you to use snowboy and wit.ai to build an enhance natural",function(err){
+    beep();
+   // Speak("This application will allow you to use snowboy and wit.ai to build an enhance natural",function(err){
          RunFSM();
-    });
+   // });
 
    
 }
@@ -160,13 +160,16 @@ function runStates(){
 
 function beep(){
     // play beep sound
-    var music = new Sound('resources/ding.wav');
-    music.play();
-    music.on('complete',function () {
-        console.log('Done ding sound!');
-        current_state="listne";
-        RunFSM();
-    });
+   
+    Sound.play('resources/ding.wav',function(err){
+         console.log('Done ding sound!');
+         Sound.play('resources/dong.wav',function(err){
+              current_state="listne";
+            RunFSM();
+         });
+       
+    })
+    
 }
 
 /// Pars the response from wit.ai and process the response
