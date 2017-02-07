@@ -62,16 +62,11 @@ init=function(){
     });
     console.log("Run state machine...... ");
     global.current_state="hotword";
-    beep();
-   // Speak("This application will allow you to use snowboy and wit.ai to build an enhance natural",function(err){
-         RunFSM();
-   // });
-
-   
+    RunFSM();
 }
 
 
-exports.parseResult =function (err,resp,body){
+parseResult =function (err,resp,body){
     // Exposing the result of the respons to the outside
     RunFSM();
 }
@@ -87,18 +82,8 @@ StartListenForHW=function(){
    
 }
 
-exports.parseResult = function (err, resp, body) {
-  
-  if (err) 
-    console.error(err)
-   console.log(body);
 
-   nprresp=resp;
-   
-  current_state="npl";
-  RunFSM();
-}
-
+// Start record speech
 StartRecordingSpeech=function(){
     record.start({
         verbose: true,
@@ -110,12 +95,27 @@ StartRecordingSpeech=function(){
                 'Authorization': 'Bearer ' + config_json.wit.token,
                 'Content-Type': 'audio/wav'
             }
-        }, exports.parseResult));
-
-        
-
-   
+        }, function (err, resp, body) {
+            if (err)
+                {
+                    console.error(err);
+                    return;
+            }
+            console.log(body);
+            nprresp=resp;
+            current_state="npl";
+            RunFSM();
+        }));
 }
+/// Start Conversion CYCLE
+StartConversion=function(txt){
+    request('http://www.google.com', function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body) // Show the HTML for the Google homepage.
+        }
+    })
+}
+
 // Finite State Machines
 function RunFSM(){
     // TODO Execute the FSM
@@ -174,7 +174,7 @@ function beep(){
 
 /// Pars the response from wit.ai and process the response
 function ProcessNPL(){
-
+    var x=nprresp.outcomes;
 }
 
 // Speek the past text

@@ -6,13 +6,13 @@
 
     },
     "wit":{
-        "token":"6MDD6GPYT457K4T4XUU6REVJQMUYS3QP"
+        "token":"5KXUNQRE4Z2EEFNTK6FKQDKTCPWGAONI"
     },
     "snowboy":{
         "hotword":"snowboy",
         "sensativity":"0.5",
         "file":"resources/snowboy.pmdl",
-        "audiogain":"2.0"
+        "audiogain":"5.0"
 
     },
     "sound":{
