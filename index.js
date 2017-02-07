@@ -102,25 +102,55 @@ StartRecordingSpeech=function(){
                     return;
             }
             console.log(body);
-            nprresp=resp;
-            current_state="npl";
-            RunFSM();
+            StartConversion(JSON.parse(body)._text);
+            //nprresp=resp;
+            //current_state="npl";
+            //RunFSM();
         }));
 }
 /// Start Conversion CYCLE
 StartConversion=function(txt){
-    request('http://www.google.com', function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log(body) // Show the HTML for the Google homepage.
-        }
-    })
+    request.post({
+            'url': 'https://api.wit.ai/converse?session_id=123abc&client=chromium&lang=en-us&output=json&q='+txt,
+            'headers': {
+                'Accept': 'application/vnd.wit.20160202+json',
+                'Authorization': 'Bearer ' + config_json.wit.token,
+                'Content-Type': 'audio/wav'
+            }
+        }, function (err, resp, body) {
+            if (err)
+                {
+                    console.error(err);
+                    return;
+            }
+            console.log(body);
+            var json=JSON.parse(body);
+            // Run next action based on the response Type
+            switch(json.type){
+                case("msg"):
+                    Speak(json.msg,function(){
+                        current_state="listne";
+                         RunFSM();
+                    });
+                    
+                break;
+                case("action"):
+                    current_state="listne";
+                break;
+                case("stop"):
+                    current_state="hotword";
+                break;
+            };
+            
+           
+        })
 }
 
 // Finite State Machines
 function RunFSM(){
     // TODO Execute the FSM
     evalTrans(); // Evaluate 
-    runStates(); // Run States 
+   
 }
 function evalTrans(){
     switch(global.current_state){
@@ -152,11 +182,7 @@ function evalTrans(){
     }
 
 }
-function runStates(){
-    switch(current_state){
 
-    }
-}
 
 function beep(){
     // play beep sound
